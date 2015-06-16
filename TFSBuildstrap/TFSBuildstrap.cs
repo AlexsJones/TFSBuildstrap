@@ -111,12 +111,10 @@ namespace TFSBuildstrap
 
             buildStatusWatcher.Connect(buildServer, teamProject);
 
-            ConsoleSpinner spin = new ConsoleSpinner();
-            Console.Write("Working....");
             do
             {
-                spin.Turn();
-                Thread.Sleep(500);
+
+               Thread.Sleep(5000);
             } while (buildStatusWatcher.Status != QueueStatus.Completed && buildStatusWatcher.Status != QueueStatus.Canceled);
 
             if (buildStatusWatcher.Status == QueueStatus.Canceled)
