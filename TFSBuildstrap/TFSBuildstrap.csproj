@@ -69,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleSpinner.cs" />
     <Compile Include="TFSBuildstrap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -63,12 +63,13 @@ namespace TFSBuildstrap
             }
         }
     }
-    
+
     class TFSBuildstrap
     {
         static void Main(string[] args)
         {
-            if (args.Length  < 3) {
+            if (args.Length < 3)
+            {
                 Debug.WriteLine("Required args are: [TFSURL] [PROJECTNAME] [BUILDCONFIGURATION]");
                 return;
             }
@@ -84,6 +85,7 @@ namespace TFSBuildstrap
 
         public static int RunBuild(String t, String teamProject, String buildDefinition)
         {
+
             Console.WriteLine("##teamcity[progressStart 'Build in progress...']");
             int exitFlag = 0;
             // Get the specified team foundation server.
@@ -109,12 +111,12 @@ namespace TFSBuildstrap
 
             buildStatusWatcher.Connect(buildServer, teamProject);
 
+            ConsoleSpinner spin = new ConsoleSpinner();
+            Console.Write("Working....");
             do
             {
-                Debug.WriteLine(String.Format("Build:{0} is {1}", buildStatusWatcher.Build.BuildNumber, buildStatusWatcher.Status));
-
-                Thread.Sleep(1000);
-
+                spin.Turn();
+                Thread.Sleep(500);
             } while (buildStatusWatcher.Status != QueueStatus.Completed && buildStatusWatcher.Status != QueueStatus.Canceled);
 
             if (buildStatusWatcher.Status == QueueStatus.Canceled)
@@ -126,7 +128,7 @@ namespace TFSBuildstrap
 
             buildStatusWatcher.Disconnect();
 
-            Console.WriteLine("##teamcity[progressFinish 'Build in progress...']");
+            Console.WriteLine("##teamcity[progressStart 'Build in progress...']");
 
             return exitFlag;
         }
