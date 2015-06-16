@@ -1,24 +1,4 @@
-﻿//<csscript> 
-//  <references> 
-//    <reference>System</reference> 
-//    <reference>System.Core</reference> 
-//    <reference>System.Data</reference> 
-//    <reference>System.Data.DataSetExtensions</reference> 
-//    <reference>System.Xml</reference> 
-//    <reference>System.Xml.Linq</reference> 
-//    <reference>Microsoft.CSharp</reference> 
-//    <reference>Microsoft.TeamFoundation.Build.Client</reference>
-//    <reference>Microsoft.TeamFoundation.Client</reference>
-//  </references> 
-//  <mode>exe</mode> 
-//  <requiredframework>3.5</requiredframework>
-//  <requiredplatform>x64</requiredplatform>
-
-//<file>Program.cs</file> 
-
-//</csscript>
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -104,8 +84,11 @@ namespace TFSBuildstrap
 
         public static void RunBuild(String t, String teamProject, String buildDefinition)
         {
+
             // Get the specified team foundation server.
             TeamFoundationServer tfs = TeamFoundationServerFactory.GetServer(t);
+
+            tfs.EnsureAuthenticated();
 
             // Get the IBuildServer - the main point of entry to the Team Build OM.
             IBuildServer buildServer = (IBuildServer)tfs.GetService(typeof(IBuildServer));
