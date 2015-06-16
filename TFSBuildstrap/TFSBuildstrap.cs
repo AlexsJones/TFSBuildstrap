@@ -26,6 +26,7 @@ using System.Threading.Tasks;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.Build.Client;
 using System.Threading;
+using System.Diagnostics;
 
 namespace TFSBuildstrap
 {
@@ -88,7 +89,7 @@ namespace TFSBuildstrap
         static void Main(string[] args)
         {
             if (args.Length  < 3) {
-                Console.WriteLine("Required args are: [TFSURL] [PROJECTNAME] [BUILDCONFIGURATION]");
+                Debug.WriteLine("Required args are: [TFSURL] [PROJECTNAME] [BUILDCONFIGURATION]");
                 return;
             }
             try
@@ -118,7 +119,7 @@ namespace TFSBuildstrap
             // Queue a build.
             IQueuedBuild qb = buildServer.QueueBuild(request, QueueOptions.None);
 
-            Console.WriteLine(String.Format("Build successfully queued. Position: {0}.", qb.QueuePosition));
+            Debug.WriteLine(String.Format("Build successfully queued. Position: {0}.", qb.QueuePosition));
 
             var buildStatusWatcher = new BuildStatusWatcher(qb.Id);
 
@@ -126,13 +127,13 @@ namespace TFSBuildstrap
 
             do
             {
-                Console.WriteLine("Build:{0} is {1} Latest Log at {2}", buildStatusWatcher.Build.BuildNumber,buildStatusWatcher.Status );
+                Debug.WriteLine(String.Format("Build:{0} is {1}", buildStatusWatcher.Build.BuildNumber, buildStatusWatcher.Status));
 
                 Thread.Sleep(1000);
 
             } while (buildStatusWatcher.Status != QueueStatus.Completed && buildStatusWatcher.Status != QueueStatus.Canceled);
 
-            Console.WriteLine("Log location for build at {0}", buildStatusWatcher.Build.LogLocation);
+            Debug.WriteLine(String.Format("Log location for build at {0}", buildStatusWatcher.Build.LogLocation));
 
             buildStatusWatcher.Disconnect();
         }
