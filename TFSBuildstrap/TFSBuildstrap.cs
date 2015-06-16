@@ -111,22 +111,26 @@ namespace TFSBuildstrap
 
             buildStatusWatcher.Connect(buildServer, teamProject);
 
+            string droppath = "";
             do
             {
 
                Thread.Sleep(5000);
             } while (buildStatusWatcher.Status != QueueStatus.Completed && buildStatusWatcher.Status != QueueStatus.Canceled);
 
-            if (buildStatusWatcher.Status == QueueStatus.Canceled)
+            if (buildStatusWatcher.Build.Status == BuildStatus.Failed)
             {
                 exitFlag = 1;
             }
 
-            Debug.WriteLine(String.Format("Log location for build at {0}", buildStatusWatcher.Build.LogLocation));
+            droppath = buildStatusWatcher.Build.DropLocation ?? "Not set";
+            Debug.WriteLine(string.Format("Log location for build at {0}", buildStatusWatcher.Build.LogLocation));
 
             buildStatusWatcher.Disconnect();
 
             Console.WriteLine("##teamcity[progressStart 'Build in progress...']");
+
+            Debug.WriteLine(string.Format("Drop Location is => {0}"),droppath);
 
             return exitFlag;
         }
