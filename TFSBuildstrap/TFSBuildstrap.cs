@@ -74,7 +74,7 @@ namespace TFSBuildstrap
             }
             try
             {
-                RunBuild(args[0], args[1], args[2]);
+                System.Environment.Exit(RunBuild(args[0], args[1], args[2]));
             }
             catch (Exception e)
             {
@@ -82,9 +82,10 @@ namespace TFSBuildstrap
             }
         }
 
-        public static void RunBuild(String t, String teamProject, String buildDefinition)
+        public static int RunBuild(String t, String teamProject, String buildDefinition)
         {
-
+            Console.WriteLine("##teamcity[progressStart 'Build in progress...']");
+            int exitFlag = 0;
             // Get the specified team foundation server.
             TeamFoundationServer tfs = TeamFoundationServerFactory.GetServer(t);
 
@@ -116,9 +117,18 @@ namespace TFSBuildstrap
 
             } while (buildStatusWatcher.Status != QueueStatus.Completed && buildStatusWatcher.Status != QueueStatus.Canceled);
 
+            if (buildStatusWatcher.Status == QueueStatus.Canceled)
+            {
+                exitFlag = 1;
+            }
+
             Debug.WriteLine(String.Format("Log location for build at {0}", buildStatusWatcher.Build.LogLocation));
 
             buildStatusWatcher.Disconnect();
+
+            Console.WriteLine("##teamcity[progressFinish 'Build in progress...']");
+
+            return exitFlag;
         }
     }
 }
