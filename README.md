@@ -23,6 +23,8 @@ Next step would be to run the TFSBuildstrap.exe with your arguments [URL] [PROJE
 
 Sit back and let teamcity chug away for a bit whilst it runs the definition.
 
+![imgTC](http://i.imgur.com/y142sJP.png)
+
 
 ####Caveats
 
